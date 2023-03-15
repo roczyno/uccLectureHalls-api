@@ -34,8 +34,17 @@ export const login = async (req, res) => {
     const originalPassword = hashedPassword.toString(CryptoJS.enc.Utf8);
     originalPassword !== req.body.password &&
       res.status(401).json("wrong password");
+    const accessToken = jwt.sign(
+      {
+        id: user._id,
+        isAdmin: user.isAdmin,
+      },
+      process.env.SECRET_KEY,
+      { expiresIn: "5d" }
+    );
+    const { password, ...others } = user._doc;
 
-    res.status(200).json(user);
+    res.status(200).json({ ...others, accessToken });
   } catch (error) {
     console.log(error);
   }
