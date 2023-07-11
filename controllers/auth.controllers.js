@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import Users from "../models/users.model.js";
 import CryptoJS from "crypto-js";
 
-export const createUser = async (req, res) => {
+export const register = async (req, res) => {
   const user = new Users({
     username: req.body.username,
     email: req.body.email,
@@ -47,5 +47,6 @@ export const login = async (req, res) => {
     res.status(200).json({ ...others, accessToken });
   } catch (error) {
     console.log(error);
+    res.status(500).send({ message: "internal server error" });
   }
 };
